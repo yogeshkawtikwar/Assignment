@@ -1,0 +1,189 @@
+1. How to check a process running with full path information?
+ans - using ps command
+
+2. Using vi editor, how to globally replace a string?
+ans - %s/string/changestring/g
+
+3.How to search for a string in all files under a folder and
+sub-folders?
+ans - grep "stringforsearch" -rn
+      grep "stringforsearch\|second stringforsearch" -rn
+
+4. How to remove control-m characters? Refer file
+/home/srinivasan.r/unix/ctrlm.txt on agni server which
+contains these characters.
+ans -  %s/^M//g
+
+5. How to redirect the output of a command to a file output.txt
+and errors to another file errors.txt ?
+ans - (for output) => any command > filename.txt
+      => pwd > output.txt
+      (for error) => any command 2> filename.txt
+      => pwdd 2> err.txt
+
+6. How to redirect the output of a command and append to the
+file?
+ans - cat filename1 >> filename2(append in this file)
+
+7. How to redirect STDERR to STDOUT
+ans - echo yogesh 1 > strout.txt
+      pwdd 2> err.txt
+      command >> std_out_err 2>&1
+ grep -r "hello" > o.txt 2> e.txt
+
+
+8. How to find memory usage on a unix system?
+ans -free, vmstat
+
+9. How to find how you are logged in as
+ans - whoami
+
+10. How to find the type of machine you are currently on and
+name of the machine
+ans - hostname
+
+11. How to find out if a particular port is being used
+ans  netstat -l | grep port number
+
+
+12. How do seperate a process from the current running shell so that it continues
+to run even after the user logs out.
+Ans - sleep 100 &
+      fg %(process id)
+      bg %(process id) it will start running in background.
+Ctrl + Z then run bg to put your most recent suspended task to
+background, allowing it to continue running. It will keep the process running after you
+log out.
+
+13. How do you know how much disk is available?
+ans - df commond 
+
+14. What is the difference between kill -9 and just kill ?
+ans - kill / kill -TERM / kill -15 is the safe and correct way of terminating a process. It's
+equivalent to safely shutting down a computer. kill -9 is the unsafe way of brutally
+murdering a process. It's equivalent to pulling the power cord, and may cause data
+corruption.
+
+15. What permissions chmod 710 on a directory do?
+ans - chmod 710 filename
+      Chmod 710 (chmod a+rwx,g-rw,o-rwx) sets permissions so that, (U)ser / owner
+can read, can write and can execute. (G)roup can't read, can't write and can execute.
+(O)thers can't read, can't write and can't execute
+
+16. How to run a process in the background ? How to bring it to the
+foreground ?
+ans - sleep 100 &
+      fg %(process id)
+      bg %(process id) it will start running in background.
+
+17. How to find how many times the word “hello” occurs in a file.
+ans - grep "stringtosearch" -o filename | wc -l
+
+18. How to check whether a machine is reachable from your machine.
+ans -  ping ip address
+
+
+***********************************************************************************************************
+commands to try 
+***********************************************************************************************************
+* List number of files in a directory and count lines in each file
+ans - command - wc -l `find yogesh -type f`
+
+1) to find files and directory in one directory
+ans - ls | wc -l
+
+2) to find files and directory in one directory recursively
+ans - ls -l| wc -l
+
+3) to find files in one directory
+ans - ls -l | grep ^- | wc -l
+
+4) to find directory in one directory
+ans - ls -l | grep ^d | wc -l
+
+5) to find no of lines in file 
+ans -  wc -l filename 
+
+* Find the files which are 5 days older and then zip them
+ans - find yogesh1 -mtime -5 -print
+->zip -r zip`find yogesh1 -mtime -5 -print`
+->find/var/dtpdev/tmp/ -type f -mtime +5
+
+* list of 5 largest files from any directory
+ans - du -a | sort -n -r | head -n 1
+      du -a/specific directory name/ | sort -n -r | head -n 1
+
+* read a file and replace 10th appearance of the word "the" to "abc" and write the output in another file
+ans - sed 's/the/abc/10' filename1  > filename2
+
+* find out the available memory on the server, how long the server has been up and top 5 
+ans - free, free -g , uptime
+      cat /proc/meminfo
+command - ps -aux | sort -nrk +4 | head -n 5
+
+* find out the pid of the process and kill the process gracefully/forcefully
+ans - ps aux to see all running process.     
+      top
+      kill id
+
+* find out how many users are connected to port 22 on a server
+ans - netstat -anp |grep :22 |wc -l
+
+* copy a file from one server to another (using scp)
+ans - 
+From server to local machine
+scp yogesh.kawtikwar@10.76.139.50:/home/yogesh.kawtikwar/yogesh/script/e.txt .
+
+From local machine to server
+scp yogesh.kawtikwar@10.76.139.50:/home/yogesh.kawtikwar/yogesh/script .
+
+***********************************************************************************************************
+scripts
+***********************************************************************************************************
+1. write a bash script to print the the present working directory along with its list of files inside
+ans - #!/bin/bash
+
+workingdirectory=$(pwd)
+files=$(ls)
+
+echo The current working Directory = $workingdirectory
+echo The list of files and subdirectories = $files
+
+2. write a bash script to print with tab delimited first 50 Fibonacci numbers in reverse directions
+ans - #! /bin/bash
+first=0
+second=1
+count=0
+count2=0
+num=50
+rev=0
+while [ $count -le $num ]
+do
+  fib=$(( $first + $second ))
+
+ if [ $num -eq $count ]
+  then
+    while [ $num -ge $count2 ]
+      do
+        rev=$(( $second - $first ))
+        echo $rev
+        second=$first
+        first=$rev
+        let count2++
+      done
+  fi
+first=$second
+second=$fib
+let count++
+done
+
+3. write a bash script which takes a line as input and then print the same line in capital letters
+ans - #!/bin/bash
+
+echo please enter your full name
+read fullname
+
+echo your full name is ${fullname^^}
+
+
+
